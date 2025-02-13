@@ -1,15 +1,20 @@
-"""File for analyzing performance data from benchmarks."""
-
 import subprocess
 import os
 import matplotlib.pyplot as plt
+import re
 
 def run_benchmark(executable):
     if os.path.isfile(executable):
         result = subprocess.run([executable], capture_output=True, text=True)
-        return result.stdout
+        output = result.stdout
+        match = re.search(r"executed in ([\d.]+) seconds", output)
+        if match:
+            time = float(match.group(1))
+        else:
+            time = None
+        return output, time
     else:
-        return f"{executable} not found."
+        return f"{executable} not found.", None
 
 def main():
     benchmarks = {
@@ -21,28 +26,28 @@ def main():
     results = {}
     for name, executable in benchmarks.items():
         print(f"Running {name} benchmark...")
-        output = run_benchmark(executable)
+        output, time = run_benchmark(executable)
         print(output)
-        if "executed in " in output:
-            results[name] = True
+        if time is not None:
+            results[name] = (True, time)
         else:
-            results[name] = False
+            results[name] = (False, None)
 
-    # Plot the results using matplotlib
-    labels = list(results.keys())
-    compiled = [1 for _ in labels]  # All bars have the same height
-    colors = ['green' if results[label] else 'red' for label in labels]
-    markers = ['✔' if results[label] else '✘' for label in labels]
+    # Create a table to display the results
+    fig, ax = plt.subplots(figsize=(10, 2 + len(results) * 0.5))  # Adjust the figure size based on the number of benchmarks
+    ax.axis('tight')
+    ax.axis('off')
+    table_data = [["Benchmark", "Compiled", "Execution Time (seconds)"]]
+    for name, (compiled, time) in results.items():
+        table_data.append([name, "✔" if compiled else "✘", f"{time:.12f}" if time is not None else "N/A"])
 
-    plt.bar(labels, compiled, color=colors)
-    for i, marker in enumerate(markers):
-        plt.text(i, 1, marker, ha='center', va='bottom', fontsize=12, fontweight='bold')
+    table = ax.table(cellText=table_data, colLabels=None, cellLoc='center', loc='center')
+    table.auto_set_font_size(False)
+    table.set_fontsize(10)  # Adjust the font size
+    table.scale(1.2, 1.2)  # Adjust the scaling
 
-    plt.xlabel('Benchmarks')
-    plt.ylabel('Compilation Status')
-    plt.title('Benchmark Compilation Status')
-    plt.ylim(0, 1.5)  # Adjust y-axis to make space for markers
-    plt.savefig('/usr/src/app/benchmark_results.png')  # Save the plot as an image
+    plt.title('Benchmark Compilation and Execution Time')
+    plt.savefig('/usr/src/app/benchmark_results.png')  # Save the table as an image
 
 if __name__ == "__main__":
     main()
