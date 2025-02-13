@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  c-benchmarks:
+    build:
+      context: .
+      dockerfile: c/Dockerfile
+    container_name: c_benchmarks
+    volumes:
+      - shared-data:/usr/src/app/bin
+
+  analysis:
+    build:
+      context: .
+      dockerfile: analysis/Dockerfile
+    container_name: analysis
+    volumes:
+      - shared-data:/usr/src/app/bin
+    depends_on:
+      - c-benchmarks
+
+volumes:
+  shared-data:
