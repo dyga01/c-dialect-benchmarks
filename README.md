@@ -24,10 +24,11 @@ what aspects of memory safety does rust have that checked c does not have. how c
 - integrate checked c too
 - use matplotlib to report if the code compiled and the time it took in analysis
 - make it just have memory benchmarks and not time. im not concerned about time.
-
+- BUG: RUST TIMES NOT SHOWING UP
 
 `docker-compose up`
 `docker-compose build c-benchmarks`
 `docker-compose build analysis`
+`docker-compose build rust-benchmarks`
 `docker-compose build`
 `docker cp analysis:/usr/src/app/benchmark_results.png ./benchmark_results.png`

@@ -21,6 +21,9 @@ def main():
         "C Buffer Overflow": "/usr/src/app/bin/buffer-overflow",
         "C Null Pointer Dereference": "/usr/src/app/bin/null-pointer-dereference",
         "C Use-After-Free": "/usr/src/app/bin/use-after-free",
+        "Rust Buffer Overflow": "/usr/src/app/bin/rust-buffer-overflow",
+        "Rust Null Pointer Dereference": "/usr/src/app/bin/rust-null-pointer-dereference",
+        "Rust Use-After-Free": "/usr/src/app/bin/rust-use-after-free",
     }
 
     results = {}
