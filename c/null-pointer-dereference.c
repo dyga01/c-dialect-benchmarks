@@ -3,13 +3,15 @@
 
 void null_pointer_dereference() {
     int* ptr = NULL;
+    struct timespec start, end;
 
-    clock_t start = clock();
+    clock_gettime(CLOCK_MONOTONIC_RAW, &start);
 
     int value = *ptr;  // Crash! Dereferencing NULL.
 
-    clock_t end = clock();
-    printf("Null Pointer Dereference executed in %lf seconds\n", (double)(end - start) / CLOCKS_PER_SEC);
+    clock_gettime(CLOCK_MONOTONIC_RAW, &end);
+    double elapsed = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
+    printf("Null Pointer Dereference executed in %.12lf seconds\n", elapsed);
 }
 
 int main() {

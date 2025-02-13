@@ -6,14 +6,17 @@
 
 void buffer_overflow() {
     char buffer[SIZE];
-    clock_t start = clock();
+    struct timespec start, end;
+
+    clock_gettime(CLOCK_MONOTONIC_RAW, &start);
 
     for (int i = 0; i <= SIZE; i++) {  // Out-of-bounds access!
         buffer[i] = 'A';  
     }
 
-    clock_t end = clock();
-    printf("Buffer Overflow executed in %lf seconds\n", (double)(end - start) / CLOCKS_PER_SEC);
+    clock_gettime(CLOCK_MONOTONIC_RAW, &end);
+    double elapsed = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
+    printf("Buffer Overflow executed in %.12lf seconds\n", elapsed);
 }
 
 int main() {

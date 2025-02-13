@@ -6,14 +6,17 @@ void use_after_free() {
     int* ptr = (int*)malloc(sizeof(int));
     *ptr = 42;
     
-    clock_t start = clock();
+    struct timespec start, end;
+
+    clock_gettime(CLOCK_MONOTONIC_RAW, &start);
 
     free(ptr);  // Memory freed
 
     int value = *ptr;  // UAF! Accessing freed memory.
 
-    clock_t end = clock();
-    printf("Use-After-Free executed in %lf seconds\n", (double)(end - start) / CLOCKS_PER_SEC);
+    clock_gettime(CLOCK_MONOTONIC_RAW, &end);
+    double elapsed = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
+    printf("Use-After-Free executed in %.12lf seconds\n", elapsed);
 }
 
 int main() {
