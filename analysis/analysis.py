@@ -24,6 +24,9 @@ def main():
         "Rust Buffer Overflow": "/usr/src/app/bin/rust-buffer-overflow",
         "Rust Null Pointer Dereference": "/usr/src/app/bin/rust-null-pointer-dereference",
         "Rust Use-After-Free": "/usr/src/app/bin/rust-use-after-free",
+        "Checked C Buffer Overflow": "/usr/src/app/bin/checked-c-buffer-overflow",
+        "Checked C Null Pointer Dereference": "/usr/src/app/bin/checked-c-null-pointer-dereference",
+        "Checked C Use-After-Free": "/usr/src/app/bin/checked-c-use-after-free",
     }
 
     results = {}
