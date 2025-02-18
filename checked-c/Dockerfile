@@ -1,49 +1,40 @@
-# Use the official Ubuntu image as the base image
-FROM ubuntu:latest
+# Use Ubuntu 22.04 as base image
+FROM --platform=linux/amd64 ubuntu:22.04
 
-# Install dependencies
+# Install essential packages
 RUN apt-get update && apt-get install -y \
-    git \
-    cmake \
-    ninja-build \
-    clang \
-    lld \
-    python3 \
-    python3-pip \
-    python3-setuptools \
-    curl \
     wget \
-    unzip \
-    build-essential
+    tar \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
 
-# Clone Checked C repositories
-WORKDIR /opt
-RUN git clone https://github.com/microsoft/checkedc-clang.git checkedc-clang
-RUN git clone https://github.com/microsoft/checkedc.git checkedc
+# Set working directory
+WORKDIR /opt/checkedc
 
-# Build Checked C Compiler
-WORKDIR /opt/checkedc-clang
-RUN mkdir build && cd build && \
-    cmake -G Ninja \
-      -DCMAKE_BUILD_TYPE=Release \
-      -DLLVM_ENABLE_PROJECTS="clang" \
-      -DLLVM_TARGETS_TO_BUILD="X86" \
-      -DCMAKE_INSTALL_PREFIX=/usr/local \
-      ../llvm && \
-    ninja clang clangd lld && ninja install
+# Copy the Checked C tar file into the container
+COPY CheckedC-Clang-12.0.0-gnu-ubuntu-22.04.tar.gz .
 
-# Set environment variables
-ENV PATH="/usr/local/bin:$PATH"
+# Extract and install Checked C
+RUN gunzip CheckedC-Clang-12.0.0-gnu-ubuntu-22.04.tar.gz \
+    && tar xf CheckedC-Clang-12.0.0-gnu-ubuntu-22.04.tar \
+    && rm CheckedC-Clang-12.0.0-gnu-ubuntu-22.04.tar
 
-# Copy benchmark source files to container
-WORKDIR /usr/src/app
-COPY . /usr/src/app
+# Copy the source files into the container
+COPY buffer-overflow.c /usr/src/app/checked-c/
+COPY null-pointer-dereference.c /usr/src/app/checked-c/
+COPY use-after-free.c /usr/src/app/checked-c/
 
-# Build benchmark executables
-WORKDIR /usr/src/app/checked-c
-RUN gcc -o /usr/src/app/bin/checked-c-buffer-overflow buffer-overflow.c -fcheckedc-extension && \
-    gcc -o /usr/src/app/bin/checked-c-null-pointer-dereference null-pointer-dereference.c -fcheckedc-extension && \
-    gcc -o /usr/src/app/bin/checked-c-use-after-free use-after-free.c -fcheckedc-extension
+# List the contents of the directory to verify the path
+RUN ls -l /opt/checkedc
 
-# Set up an entrypoint to allow running shell commands
-ENTRYPOINT ["/bin/bash"]
+# Add Checked C binaries to PATH
+ENV PATH="/opt/checkedc/CheckedC-Clang-12.0.0git-Linux/bin:${PATH}"
+
+# Add Checked C include path
+ENV C_INCLUDE_PATH="/opt/checkedc/CheckedC-Clang-12.0.0git-Linux/include:${C_INCLUDE_PATH}"
+
+# Verify installation
+RUN clang --version
+
+# Set default command to bash
+CMD ["/bin/bash"]
