@@ -1,34 +1,32 @@
 # C Dialect Benchmarks
 
-An analysis of how different C dialects compare to Rust in terms of performance and memory safety.
+An analysis of how C and Checked C compare to Rust in terms of memory safety.
 
-### Benchmarks
+## Getting Started
 
-My goal is to determine what memory safety features these C dialects are missing that Rust has. Here is the plan to run consistent benchmarks to achieve this:
+1. **Install the Checked C toolchain**:
+   Download the Checked C toolchain tarball from [Checked C Clang Releases](https://github.com/checkedc/checkedc-clang/releases/tag/CheckedC-Clang-12.0.2) and place it in the `checked-c` directory.
 
-what aspects of memory safety does rust have that checked c does not have. how can i show this through memory safety benchmarks
+2. **Build and run the Docker containers**:
+   ```sh
+   docker-compose build
+   docker-compose up
+   ```
 
+## Benchmarks
 
+The benchmarks focus on three common memory vulnerabilities:
 
+- Buffer overflows
+- Use-after-free vulnerabilities
+- Null pointer dereferences
 
+Each benchmark is implemented in C, Checked C, and Rust to compare how each language handles these vulnerabilities.
 
+## Results
 
+The results of the benchmarks will be analyzed and presented in the `analysis/analysis.py` script. You can run this script to generate a detailed report of the findings.
 
-3 most comon memory vulnerabilities
-- buffer overflows
-- use-after-free vulnerabilities
-- null pointer dereferences
+## Conclusion
 
-- no dockerfile for rust because it will not compile for now?
-- if something doesnt compile then dont make it crash
-- integrate checked c too
-- use matplotlib to report if the code compiled and the time it took in analysis
-- make it just have memory benchmarks and not time. im not concerned about time.
-- BUG: RUST TIMES NOT SHOWING UP
-
-`docker-compose up`
-`docker-compose build c-benchmarks`
-`docker-compose build analysis`
-`docker-compose build checked-c-benchmarks`
-`docker-compose build`
-`docker cp analysis:/usr/src/app/benchmark_results.png ./benchmark_results.png`
+This project aims to highlight the differences in memory safety between C, Checked C, and Rust, providing insights into the strengths and weaknesses of each language in handling common memory vulnerabilities.
