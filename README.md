@@ -29,6 +29,6 @@ what aspects of memory safety does rust have that checked c does not have. how c
 `docker-compose up`
 `docker-compose build c-benchmarks`
 `docker-compose build analysis`
-`docker-compose build rust-benchmarks`
+`docker-compose build checked-c-benchmarks`
 `docker-compose build`
 `docker cp analysis:/usr/src/app/benchmark_results.png ./benchmark_results.png`

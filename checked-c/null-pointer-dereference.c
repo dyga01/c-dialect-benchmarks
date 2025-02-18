@@ -1,20 +1,21 @@
-#include <stdio.h>
-#include <time.h>
-#include <stdlib_checked.h>
+#include <stdio_checked.h>
+#include <time_checked.h>
+#include <checkedc.h>
 
 void null_pointer_dereference() {
-    _Ptr<int> ptr = NULL;
+    ptr<int> ptr = NULL;
+    struct timespec start, end;
 
-    clock_t start = clock();
-    if (ptr) {  // Checked C forces null check
+    clock_gettime(CLOCK_MONOTONIC_RAW, &start);
+
+    if (ptr != NULL) {
         int value = *ptr;
+        printf("Value: %d\n", value);
+    } else {
+        printf("Null Pointer Dereference prevented!\n");
     }
-    clock_t end = clock();
 
-    printf("Null Pointer Dereference executed in %lf seconds\n", (double)(end - start) / CLOCKS_PER_SEC);
-}
-
-int main() {
-    null_pointer_dereference();
-    return 0;
+    clock_gettime(CLOCK_MONOTONIC_RAW, &end);
+    double elapsed = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
+    printf("Null Pointer Dereference executed in %.12lf seconds\n", elapsed);
 }
