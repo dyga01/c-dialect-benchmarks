@@ -9,8 +9,7 @@ An analysis of how C and Checked C compare to Rust in terms of memory safety.
 
 2. **Build and run the Docker containers**:
    ```sh
-   docker-compose build
-   docker-compose up
+   docker-compose up --build
    ```
 
 ## Benchmarks

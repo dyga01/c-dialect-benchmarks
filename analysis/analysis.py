@@ -1,22 +1,30 @@
+"""Analysis File for Printing Benchmark Results."""
+
 import subprocess
 import os
-import matplotlib.pyplot as plt
-import re
+from tabulate import tabulate
 
 def run_benchmark(executable):
+    """
+    Runs the specified benchmark executable and captures its output.
+
+    Args:
+        executable (str): The path to the benchmark executable.
+
+    Returns:
+        tuple: A tuple containing the output of the benchmark and a boolean indicating if the executable was found and run successfully.
+    """
     if os.path.isfile(executable):
         result = subprocess.run([executable], capture_output=True, text=True)
         output = result.stdout
-        match = re.search(r"executed in ([\d.]+) seconds", output)
-        if match:
-            time = float(match.group(1))
-        else:
-            time = None
-        return output, time
+        return output, True
     else:
-        return f"{executable} not found.", None
+        return f"{executable} not found.", False
 
 def main():
+    """
+    Main function to run all benchmarks and display the results in a table format.
+    """
     benchmarks = {
         "C Buffer Overflow": "/usr/src/app/bin/buffer-overflow",
         "C Null Pointer Dereference": "/usr/src/app/bin/null-pointer-dereference",
@@ -32,28 +40,17 @@ def main():
     results = {}
     for name, executable in benchmarks.items():
         print(f"Running {name} benchmark...")
-        output, time = run_benchmark(executable)
+        output, compiled = run_benchmark(executable)
         print(output)
-        if time is not None:
-            results[name] = (True, time)
-        else:
-            results[name] = (False, None)
+        results[name] = compiled
 
     # Create a table to display the results
-    fig, ax = plt.subplots(figsize=(10, 2 + len(results) * 0.5))  # Adjust the figure size based on the number of benchmarks
-    ax.axis('tight')
-    ax.axis('off')
-    table_data = [["Benchmark", "Compiled", "Execution Time (seconds)"]]
-    for name, (compiled, time) in results.items():
-        table_data.append([name, "✔" if compiled else "✘", f"{time:.12f}" if time is not None else "N/A"])
+    table_data = [["Benchmark", "Compiled"]]
+    for name, compiled in results.items():
+        table_data.append([name, "✔" if compiled else "✘"])
 
-    table = ax.table(cellText=table_data, colLabels=None, cellLoc='center', loc='center')
-    table.auto_set_font_size(False)
-    table.set_fontsize(10)  # Adjust the font size
-    table.scale(1.2, 1.2)  # Adjust the scaling
-
-    plt.title('Benchmark Compilation and Execution Time')
-    plt.savefig('/usr/src/app/benchmark_results.png')  # Save the table as an image
+    # Print the table to the terminal
+    print(tabulate(table_data, headers="firstrow", tablefmt="grid"))
 
 if __name__ == "__main__":
     main()
