@@ -17,6 +17,14 @@ services:
     volumes:
       - shared-data:/usr/src/app/bin
 
+  rust-benchmarks:
+    build:
+      context: .
+      dockerfile: rust/Dockerfile
+    container_name: rust_benchmarks
+    volumes:
+      - shared-data:/usr/src/app/bin
+
   analysis:
     build:
       context: .
@@ -27,6 +35,7 @@ services:
     depends_on:
       - c-benchmarks
       - checked-c-benchmarks
+      - rust-benchmarks
 
 volumes:
   shared-data:

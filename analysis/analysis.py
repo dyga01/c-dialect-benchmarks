@@ -21,6 +21,22 @@ def run_benchmark(executable):
     else:
         return f"{executable} not found.", False
 
+def list_files(directory):
+    """
+    Lists all files in the specified directory.
+
+    Args:
+        directory (str): The path to the directory.
+
+    Returns:
+        list: A list of file names in the directory.
+    """
+    try:
+        files = os.listdir(directory)
+        return files
+    except FileNotFoundError:
+        return []
+
 def main():
     """
     Main function to run all benchmarks and display the results in a table format.
@@ -36,6 +52,11 @@ def main():
         "Checked C Null Pointer Dereference": "/usr/src/app/bin/checked-c-null-pointer-dereference",
         "Checked C Use-After-Free": "/usr/src/app/bin/checked-c-use-after-free",
     }
+
+    # List and print all files in the /usr/src/app/bin directory
+    bin_directory = "/usr/src/app/bin"
+    files = list_files(bin_directory)
+    print(f"Files in {bin_directory}: {files}")
 
     results = {}
     for name, executable in benchmarks.items():
