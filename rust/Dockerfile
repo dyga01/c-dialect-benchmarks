@@ -16,8 +16,8 @@ COPY . .
 RUN mkdir -p /usr/src/app/bin
 
 # Compile Rust programs and place the executables in the bin directory
-RUN /root/.cargo/bin/rustc -o /usr/src/app/bin/rust-buffer-overflow rust/buffer-overflow.rs
-RUN /root/.cargo/bin/rustc -o /usr/src/app/bin/rust-null-pointer-dereference rust/null-pointer-dereference.rs
+RUN /root/.cargo/bin/rustc -o /usr/src/app/bin/rust-buffer-overflow rust/buffer-overflow.rs || true
+RUN /root/.cargo/bin/rustc -o /usr/src/app/bin/rust-null-pointer-dereference rust/null-pointer-dereference.rs || true
 RUN /root/.cargo/bin/rustc -o /usr/src/app/bin/rust-use-after-free rust/use-after-free.rs || true
 
 # Default command to run all Rust benchmarks

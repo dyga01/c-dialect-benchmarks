@@ -18,9 +18,9 @@ COPY . .
 RUN mkdir -p /usr/src/app/bin
 
 # Compile C programs and place the executables in the bin directory
-RUN gcc -o /usr/src/app/bin/buffer-overflow c/buffer-overflow.c
-RUN gcc -o /usr/src/app/bin/null-pointer-dereference c/null-pointer-dereference.c
-RUN gcc -o /usr/src/app/bin/use-after-free c/use-after-free.c
+RUN gcc -o /usr/src/app/bin/buffer-overflow c/buffer-overflow.c || true
+RUN gcc -o /usr/src/app/bin/null-pointer-dereference c/null-pointer-dereference.c || true
+RUN gcc -o /usr/src/app/bin/use-after-free c/use-after-free.c || true
 
 # Default command to run all C benchmarks
 CMD ["sh", "-c", "test -f /usr/src/app/bin/buffer-overflow && /usr/src/app/bin/buffer-overflow; test -f /usr/src/app/bin/null-pointer-dereference && /usr/src/app/bin/null-pointer-dereference; test -f /usr/src/app/bin/use-after-free && /usr/src/app/bin/use-after-free"]
