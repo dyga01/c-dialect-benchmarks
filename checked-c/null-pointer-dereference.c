@@ -1,26 +1,15 @@
 #include <stdio_checked.h>
-#include <stdlib_checked.h>
-#include <time_checked.h>
 #include <stdchecked.h>
 
 #pragma CHECKED_SCOPE ON
 
-void null_pointer_dereference() {
-    ptr<int> ptr = NULL;
-    struct timespec start, end;
+void null_pointer_dereference(void) {
+    _Checked int* ptr = NULL;  // Declare pointer with Checked C qualifiers
 
-    clock_gettime(CLOCK_MONOTONIC_RAW, &start);
-    
-    if (ptr) {
-        int value = *ptr;  // Safe: only dereference if not NULL
-        (void)value; // Avoid unused variable warning
-    } else {
-        fputs("Error: Attempted to dereference a NULL pointer\n", stderr);
-    }
+    // Intentional null pointer dereference
+    int value = *ptr;  // Dereferencing NULL will still result in a runtime crash
 
-    clock_gettime(CLOCK_MONOTONIC_RAW, &end);
-    double elapsed = (end.tv_sec - start.tv_sec) + (end.tv_nsec - start.tv_nsec) / 1e9;
-    printf("Null Pointer Dereference avoided in %.12lf seconds\n", elapsed);
+    printf("Null Pointer Dereference executed\n");
 }
 
 int main(void) {

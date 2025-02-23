@@ -19,7 +19,7 @@ def run_benchmark(executable):
         output = result.stdout
         return output, True
     else:
-        return f"{executable} not found.", False
+        return f"{executable} failed to compile.\n", False
 
 def list_files(directory):
     """
