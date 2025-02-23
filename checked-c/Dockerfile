@@ -30,10 +30,13 @@ ENV PATH="/opt/checkedc/CheckedC-Clang-12.0.0git-Linux/bin:${PATH}"
 # Add Checked C include path
 ENV C_INCLUDE_PATH="/opt/checkedc/CheckedC-Clang-12.0.0git-Linux/include:${C_INCLUDE_PATH}"
 
+# Create a directory for the compiled executables
+RUN mkdir -p /usr/src/app/bin
+
 # Compile Checked C programs and place the executables in the bin directory
-RUN clang -o /usr/src/app/bin/checked-c-buffer-overflow /usr/src/app/checked-c/buffer-overflow.c || true
-RUN clang -o /usr/src/app/bin/checked-c-null-pointer-dereference /usr/src/app/checked-c/null-pointer-dereference.c || true
-RUN clang -o /usr/src/app/bin/checked-c-use-after-free /usr/src/app/checked-c/use-after-free.c || true
+RUN clang -o /usr/src/app/bin/checked-c-buffer-overflow /usr/src/app/checked-c/buffer-overflow.c -fcheckedc-extension || true
+RUN clang -o /usr/src/app/bin/checked-c-null-pointer-dereference /usr/src/app/checked-c/null-pointer-dereference.c -fcheckedc-extension || true
+RUN clang -o /usr/src/app/bin/checked-c-use-after-free /usr/src/app/checked-c/use-after-free.c -fcheckedc-extension || true
 
 # Verify installation
 RUN clang --version
