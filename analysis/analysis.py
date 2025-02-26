@@ -41,27 +41,29 @@ def main():
     """
     Main function to run all benchmarks and display the results in a table format.
     """
+    bin_directory = "/usr/src/app/bin"
+    
     benchmarks = {
-        "C Buffer Overflow": "/usr/src/app/bin/buffer-overflow",
-        "C Null Pointer Dereference": "/usr/src/app/bin/null-pointer-dereference",
-        "C Use-After-Free": "/usr/src/app/bin/use-after-free",
-        "Rust Buffer Overflow": "/usr/src/app/bin/rust-buffer-overflow",
-        "Rust Null Pointer Dereference": "/usr/src/app/bin/rust-null-pointer-dereference",
-        "Rust Use-After-Free": "/usr/src/app/bin/rust-use-after-free",
-        "Checked C Buffer Overflow": "/usr/src/app/bin/checked-c-buffer-overflow",
-        "Checked C Null Pointer Dereference": "/usr/src/app/bin/checked-c-null-pointer-dereference",
-        "Checked C Use-After-Free": "/usr/src/app/bin/checked-c-use-after-free",
+        "C Buffer Overflow": "buffer-overflow",
+        "C Null Pointer Dereference": "null-pointer-dereference",
+        "C Use-After-Free": "use-after-free",
+        "Rust Buffer Overflow": "rust-buffer-overflow",
+        "Rust Null Pointer Dereference": "rust-null-pointer-dereference",
+        "Rust Use-After-Free": "rust-use-after-free",
+        "Checked C Buffer Overflow": "checked-c-buffer-overflow",
+        "Checked C Null Pointer Dereference": "checked-c-null-pointer-dereference",
+        "Checked C Use-After-Free": "checked-c-use-after-free",
     }
 
-    # List and print all files in the /usr/src/app/bin directory
-    bin_directory = "/usr/src/app/bin"
+    # List and print all files in the bin directory
     files = list_files(bin_directory)
     print(f"Files in {bin_directory}: {files}")
 
     results = {}
-    for name, executable in benchmarks.items():
+    for name, executable_name in benchmarks.items():
+        executable_path = f"{bin_directory}/{executable_name}"
         print(f"Running {name} benchmark...")
-        output, compiled = run_benchmark(executable)
+        output, compiled = run_benchmark(executable_path)
         print(output)
         results[name] = compiled
 

@@ -7,16 +7,17 @@
 #define SIZE 10
 
 void buffer_overflow(void) {
-    array_ptr<char> buffer : count(SIZE) = calloc<char>(SIZE, sizeof(char));
+    _Array_ptr<char> buffer : count(SIZE) = calloc<char>(SIZE, sizeof(char));
     if (buffer == NULL) return;
-    
+
     // This will cause a bounds check failure in Checked C
     for (int i = 0; i <= SIZE; i++) {  // Out-of-bounds access!
-        buffer[i] = 'A';  
+        buffer[i] = 'A';
+        //printf("%x\n", buffer[i]);
     }
 
     printf("Buffer Overflow executed\n");
-    free<char>(buffer);
+    //free<char>(buffer);
 }
 
 int main(void) {
