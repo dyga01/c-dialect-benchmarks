@@ -1,20 +1,22 @@
 #include <stdio_checked.h>
-#include <string_checked.h>
+#include <stdlib_checked.h>
 #include <stdchecked.h>
-
-#define SIZE 10
 
 #pragma CHECKED_SCOPE ON
 
-void buffer_overflow(void) {
-    _Checked char buffer[SIZE];  // Declare array with bounds checking
+#define SIZE 10
 
-    // This loop will attempt to access out-of-bounds memory
-    for (int i = 0; i <= SIZE; i++) {  // This will still be flagged as an error in Checked C
+void buffer_overflow(void) {
+    array_ptr<char> buffer : count(SIZE) = calloc<char>(SIZE, sizeof(char));
+    if (buffer == NULL) return;
+    
+    // This will cause a bounds check failure in Checked C
+    for (int i = 0; i <= SIZE; i++) {  // Out-of-bounds access!
         buffer[i] = 'A';  
     }
 
     printf("Buffer Overflow executed\n");
+    free<char>(buffer);
 }
 
 int main(void) {

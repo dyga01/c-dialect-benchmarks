@@ -1,14 +1,14 @@
 #include <stdio_checked.h>
+#include <stdlib_checked.h>
 #include <stdchecked.h>
 
 #pragma CHECKED_SCOPE ON
 
 void null_pointer_dereference(void) {
-    _Checked int* ptr = NULL;  // Declare pointer with Checked C qualifiers
-
-    // Intentional null pointer dereference
-    int value = *ptr;  // Dereferencing NULL will still result in a runtime crash
-
+    _ptr<int> ptr = NULL;
+    // This will cause a null check failure in Checked C
+    int value = *ptr;  // Attempting to dereference NULL
+    
     printf("Null Pointer Dereference executed\n");
 }
 

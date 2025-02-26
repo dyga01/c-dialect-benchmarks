@@ -5,17 +5,16 @@
 #pragma CHECKED_SCOPE ON
 
 void use_after_free(void) {
-    _Checked int* ptr = (_Checked int*)malloc(sizeof(int));  // Allocating memory
-    if (!ptr) {
-        fputs("Memory allocation failed\n", stderr);
-        return;
-    }
-
+    _ptr<int> ptr = malloc<int>(sizeof(int));
+    if (ptr == NULL) return;
+    
     *ptr = 42;
     
-    free(ptr);  // Memory freed
-    int value = *ptr;  // UAF! Accessing freed memory.
-
+    free<int>(ptr);  // Memory is freed
+    
+    // This should cause a failure in Checked C
+    int value = *ptr;  // Attempting to use after free
+    
     printf("Use-After-Free executed\n");
 }
 
