@@ -18,17 +18,15 @@ To evaluate memory safety across C, Checked C, and Rust, I implemented benchmark
 
 ## Experimental Results
 
-![My Results](analysis/my_results.png)
+In my experiment, I tested how different programming languages attempt to compile programs with memory safety vulnerabilities. I found that standard C and Checked C allowed all programs to compile, and that Rust mostly prevented compilation when unsafe memory operations were detected.
 
-In my experiment, I tested how different programming languages attempt to compile programs with memory safety vulnerabilities. I found that standard C allowed all programs to compile, and that both Rust and Checked C prevented compilation when unsafe memory operations were detected.
-
-These results suggest that C lacks the memory safety mechanisms to prevent memory-related errors. On the contrary, Rust enforces stricter safety rules and prevents unsafe code from compiling. Checked C was able to detect the buffer overflow, null pointer deference, and use after free errors. While these results may seem promising for Checked C, more thorough testing would need to be completed across more vulnerabilities. Checked C also requires developers to understand how to use its features correctly, as it is an extension to C, but Checked C uses a completely different compiler than normal C.
+These results suggest that C lacks the memory safety mechanisms to prevent memory-related errors. They show that Rust enforces stricter safety rules and prevents unsafe code from compiling. I was surprised to see that Checked C was able to compile all of the programs. While this may initially indicate that Checked C is not memory safe, Checked C was able to catch all of the errors except for Use-After-Free at Runtime. This suggests that while Checked C provides additional safety features compared to standard C, it does not eliminate all memory vulnerabilities at compile time. Instead, it relies on runtime checks and developer annotations to enforce safety.
 
 ## Further Research
 
 After completing my experiment, Here are some future areas to explore that I have not had the time to complete:
 
-- **Expand Memory Safety Benchmarks**: Add tests for stack overflows, integer overflows, and dangling pointers; evaluate performance impacts of memory safety mechanisms.
+- **Expand Memory Safety Benchmarks**: Add tests to check if the programs run after they compile.
 - **Automate Checked C Compiler Installation**: Develop a script to download, extract, and configure the Checked C toolchain; integrate it into the Docker setup for seamless environment provisioning.
 - **Automate Benchmark Porting**: Create a tool or script to translate C benchmarks into Checked C and Rust; use static analysis to detect required changes and suggest Checked C annotations.
 - **Compare Unsafe Rust vs Safe Rust**: Implement benchmarks using Rust’s unsafe keyword to simulate C-like behavior; compare Safe Rust’s protections against potential pitfalls in Unsafe Rust; analyze how Rust’s borrow checker and ownership model mitigate memory vulnerabilities.
