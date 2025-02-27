@@ -8,6 +8,8 @@ services:
     container_name: c_benchmarks
     volumes:
       - shared-data:/usr/src/app/bin
+    # Keep container running to ensure files are properly saved
+    command: ["sh", "-c", "gcc -o /usr/src/app/bin/buffer-overflow c/buffer-overflow.c || true && gcc -o /usr/src/app/bin/null-pointer-dereference c/null-pointer-dereference.c || true && gcc -o /usr/src/app/bin/use-after-free c/use-after-free.c || true && sleep infinity"]
 
   checked-c-benchmarks:
     build:
@@ -16,6 +18,8 @@ services:
     container_name: checked_c_benchmarks
     volumes:
       - shared-data:/usr/src/app/bin
+    # Keep container running to ensure files are properly saved  
+    command: ["sh", "-c", "clang -o /usr/src/app/bin/checked-c-buffer-overflow /usr/src/app/checked-c/buffer-overflow.c -fcheckedc-extension || true && clang -o /usr/src/app/bin/checked-c-null-pointer-dereference /usr/src/app/checked-c/null-pointer-dereference.c -fcheckedc-extension || true && clang -o /usr/src/app/bin/checked-c-use-after-free /usr/src/app/checked-c/use-after-free.c -fcheckedc-extension || true && sleep infinity"]
 
   rust-benchmarks:
     build:
@@ -24,6 +28,8 @@ services:
     container_name: rust_benchmarks
     volumes:
       - shared-data:/usr/src/app/bin
+    # Keep container running to ensure files are properly saved
+    command: ["sh", "-c", "/root/.cargo/bin/rustc -o /usr/src/app/bin/rust-buffer-overflow rust/buffer-overflow.rs || true && /root/.cargo/bin/rustc -o /usr/src/app/bin/rust-null-pointer-dereference rust/null-pointer-dereference.rs || true && /root/.cargo/bin/rustc -o /usr/src/app/bin/rust-use-after-free rust/use-after-free.rs || true && sleep infinity"]
 
   analysis:
     build:
@@ -36,6 +42,8 @@ services:
       - c-benchmarks
       - checked-c-benchmarks
       - rust-benchmarks
+    # Wait for compilation to finish before running analysis
+    command: ["sh", "-c", "sleep 10 && xvfb-run -a python analysis/analysis.py"]
 
 volumes:
   shared-data:

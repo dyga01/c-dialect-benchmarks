@@ -47,12 +47,12 @@ def main():
         "C Buffer Overflow": "buffer-overflow",
         "C Null Pointer Dereference": "null-pointer-dereference",
         "C Use-After-Free": "use-after-free",
-        "Rust Buffer Overflow": "rust-buffer-overflow",
-        "Rust Null Pointer Dereference": "rust-null-pointer-dereference",
-        "Rust Use-After-Free": "rust-use-after-free",
         "Checked C Buffer Overflow": "checked-c-buffer-overflow",
         "Checked C Null Pointer Dereference": "checked-c-null-pointer-dereference",
         "Checked C Use-After-Free": "checked-c-use-after-free",
+        "Rust Buffer Overflow": "rust-buffer-overflow",
+        "Rust Null Pointer Dereference": "rust-null-pointer-dereference",
+        "Rust Use-After-Free": "rust-use-after-free",
     }
 
     # List and print all files in the bin directory
